@@ -1,123 +1,101 @@
 <script lang="ts">
-	import moment from "moment";
-	import { Paginate, Table, Pagination, tableOrderStore, ToggleButton, Button, MultiSelectMenu, TextField } from "svelte-ux";
-  const order = tableOrderStore({ initialBy: 'Date & Time', initialDirection: 'desc' });
-  const data = [
-    { id: 1, date: '2024-02-11T12:15:09.908Z', "Type": 305, "Name": 3.7, "UID": 67, "Advisor": 4.3, "Last Updated By": "-" },
-    { id: 2, date: '2024-02-12T12:15:09.908Z', "Type": 452, "Name": 25.0, "UID": 51, "Advisor": 4.9, "Last Updated By": "-" },
-    { id: 3, date: '2024-02-12T12:15:09.908Z', "Type": 262, "Name": 16.0, "UID": 24, "Advisor": 6.0, "Last Updated By": "-" },
-    { id: 4, date: '2024-02-12T12:15:09.908Z', "Type": 159, "Name": 6.0, "UID": 24, "Advisor": 4.0, "Last Updated By": "-" },
-    { id: 5, date: '2024-02-12T12:15:09.908Z', "Type": 356, "Name": 16.0, "UID": 49, "Advisor": 3.9, "Last Updated By": "-" },
-    { id: 6, date: '2024-02-12T12:15:09.908Z', "Type": 408, "Name": 3.2, "UID": 87, "Advisor": 6.5, "Last Updated By": "-" },
-    { id: 7, date: '2024-02-12T12:15:09.908Z', "Type": 237, "Name": 9.0, "UID": 37, "Advisor": 4.3, "Last Updated By": "-" },
-    { id: 8, date: '2024-02-08T12:15:09.908Z', "Type": 375, "Name": 0.0, "UID": 94, "Advisor": 0.0, "Last Updated By": "-" },
-    { id: 9, date: '2024-02-12T12:15:09.908Z', "Type": 518, "Name": 26.0, "UID": 65, "Advisor": 7.0, "Last Updated By": "-" },
-    { id: 10, date: '2024-02-12T12:15:09.908Z', "Type": 392, "Name": 0.2, "UID": 98, "Advisor": 0.0, "Last Updated By": "-" },
-    { id: 11, date: '2024-02-12T12:15:09.908Z', "Type": 318, "Name": 0.0, "UID": 81, "Advisor": 2.0, "Last Updated By": "-" },
-    { id: 12, date: '2024-02-02T19:14:09.908Z', "Type": 360, "Name": 19.0, "UID": 9, "Advisor": 37.0, "Last Updated By": "-" },
-    { id: 13, date: '2024-02-12T12:15:09.908Z', "Type": 437, "Name": 18.0, "UID": 63, "Advisor": 4.0, "Last Updated By": "-" },
-  ];
+	import moment from 'moment';
+	import Filter from '$lib/components/Filter.svelte';
+	import { getAppointments } from '$lib/util/helpers';
+	import { Tooltip, TextField, Checkbox } from 'svelte-ux';
+	import { writable } from 'svelte/store';
+	export let data;
 
-  $: sortedData = [...data].sort($order.handler);
+	let appointments = writable(data.appointments);
 
-  const filterOptions = [
-    { name: 'Owner', value: "owner" },
-    { name: 'Completed', value: "completed" }
-  ];
+	let filter = writable({
+		search: '',
+		options: [
+			{ name: 'Assigned to me', value: 'owner', checked: false },
+			{ name: 'Completed', value: 'completed', checked: false }
+		]
+	});
 
-  let currentFilters: string[] = [];
+	function reset_filters() {
+		$filter.options.forEach((option) => (option.checked = false));
+		$filter.search = '';
+		$filter = $filter;
+	}
+
+	$: {
+		if ($filter) {
+			// console.log($filter);
+			// let newAppointments = getAppointments($filter.options.find(fil => fil.value === "owner")?.checked ? "Jasmine Edwards" : "all").then((res) => {
+			//   console.log(res.appointments);
+			// 	$appointments = res.appointments;
+			//   $appointments = $appointments;
+			// });
+		}
+	}
 </script>
 
 <div class="p-2">
-  <div class="flex justify-between items-center">
-    <h1 class="text-2xl">Appointments</h1>
-    <div class="flex gap-2">
-      <span>
-        <ToggleButton let:on={open} let:toggleOff transition={false} class="text-md">
-          Filters ({currentFilters.length})
-          <MultiSelectMenu
-            value={currentFilters}
-            options={filterOptions}
-            on:change={(e) => {
-              currentFilters = e.detail.selection.selected
-            }}
-            {open}
-            on:close={toggleOff}
-            classes={{ menu: "w-[360px]" }}
-          >
-            <svelte:fragment slot="actions">
-              <Button on:click={() => {
-                currentFilters = []
-              }}>Reset</Button>
-            </svelte:fragment>
-            <svelte:fragment slot="beforeOptions">
-              <TextField clearable autofocus placeholder="Search..." />
-            </svelte:fragment>
-          </MultiSelectMenu>
-        </ToggleButton>
-      </span>
-      <i class="fa-solid fa-circle-plus text-2xl text-accSlate hover:scale-125 duration-100 cursor-pointer mt-1"></i>
-    </div>
-  </div>
-  <hr class="my-4">
+	<div class="flex justify-between items-center pb-4">
+		<h1 class="text-2xl text-usfGreen font-medium">Appointments</h1>
+		<div class="flex gap-2">
+			<Filter on:reset={reset_filters}>
+				<div slot="search">
+					<TextField clearable autofocus placeholder="Search..." bind:value={$filter.search} />
+				</div>
+				<div slot="options">
+					<div class="pt-3" />
+					{#each $filter.options as filter_option}
+						<Checkbox bind:checked={filter_option.checked}>{filter_option.name}</Checkbox>
+						<br />
+					{/each}
+					<div class="pt-3" />
+				</div>
+			</Filter>
+			<i
+				class="fa-solid fa-circle-plus text-2xl text-accSlate hover:scale-125 duration-100 cursor-pointer mt-1"
+			></i>
+		</div>
+	</div>
 </div>
 
-
-<Paginate items={sortedData} perPage={25} let:pageItems let:pagination>
-  <Table
-    classes={{ thead: 'text-lg', th: "p-2", td: "px-2 py-2", tr: "hover:bg-accSlate/5 rounded-md cursor-pointer", table: "rounded-md" }}
-    data={pageItems}
-    columns={[
-      {
-        header: "Date & Time",
-        name: "date",
-        align: "left",
-        format: (value) => moment(value).format('MMM Do [at] h:m A')
-      },
-      {
-        name: "Type",
-        align: "left",
-        format: "integer",
-      },
-      {
-        name: "Name",
-        align: "left",
-        format: "integer",
-      },
-      {
-        name: "UID",
-        align: "left",
-        format: "integer",
-      },
-      {
-        name: "Advisor",
-        align: "left",
-        format: "integer",
-      },
-      {
-        name: "Last Updated By",
-        align: "left",
-      },
-    ]}
-    orderBy={$order.by}
-    orderDirection={$order.direction}
-    on:headerClick={(e) => {
-      if (e.detail.column.orderBy !== false) {
-        order.onHeaderClick(e.detail.column);
-      }
-    }}
-    on:cellClick={(e) => {
-      console.log(e.detail.rowData.id);
-    }}
-  />
-  <Pagination
-    {pagination}
-    perPageOptions={[5, 10, 25, 100]}
-    show={["perPage", "pagination", "prevPage", "nextPage"]}
-    classes={{
-      root: "border-t py-1 mt-2",
-      perPage: "flex-1 text-right",
-      pagination: "px-8",
-    }}
-  />
-</Paginate>
+<section class="w-full min-w-[800px] overflow-x-auto">
+	<table class="table w-full">
+		<tr class="text-left border-y rounded">
+			<th class="p-2">Date & Time</th>
+			<th class="p-2">Type</th>
+			<th class="p-2">Name</th>
+			<th class="p-2">UID</th>
+			<th class="p-2">Advisor</th>
+			<th class="p-2">Last Updated By</th>
+		</tr>
+		{#each data.appointments as appt}
+			<Tooltip placement="bottom-start">
+				<div
+					slot="title"
+					class="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 bg-accSlate text-white/80 px-4 py-2 text-xs rounded shadow"
+				>
+					<div class="col-span-2 text-sm font-semibold">
+						{moment(appt.dateTime).format('ddd, MMMM Do')}
+					</div>
+					<div class="text-surface-100/50 justify-self-start">Campus:</div>
+					<div class="justify-self-end">{appt.studentCampus}</div>
+					<div class="text-surface-100/50 justify-self-start">Scheduled By:</div>
+					<div class="justify-self-end">{appt.scheduledBy}</div>
+					<div class="col-span-2">{appt.reason}</div>
+				</div>
+				<tr
+					class="hover:bg-gray-200 duration-200 cursor-pointer"
+					on:click={() => console.log(appt.id)}
+				>
+					<td class="p-2">{moment(appt.dateTime).format('M-D-YY h:mm A')}</td>
+					<td class="p-2">{appt.type.split(' ')[0]}</td>
+					<td class="p-2">{appt.studentName}</td>
+					<td class="p-2">{appt.studentUid}</td>
+					<td class="p-2">{appt.advisor}</td>
+					<td class="p-2">{appt.lastUpdatedBy || '-'}</td>
+				</tr>
+			</Tooltip>
+		{/each}
+	</table>
+	<div></div>
+</section>

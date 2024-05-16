@@ -5,9 +5,12 @@ import sveltePreprocess from 'svelte-preprocess';
 const config = {
 	preprocess: [sveltePreprocess()],
 	onwarn: (warning, handler) => {
-    if (warning.code.startsWith('a11y-') || warning.code.startsWith('A11y:')) {
+    if (warning.code.startsWith('a11y') || warning.code.startsWith('A11y')) {
       return;
     }
+		if (warning.filename && warning.filename.includes('svelte-ux')) {
+			return;
+		}
     handler(warning);
   },
 	vitePlugin: {

@@ -16,7 +16,7 @@
 	}
 </script>
 
-<a on:click={onClick} class="flex flex-col rounded pt-1 pb-3 px-4 border border-accSlate/15 bg-surface-100 shadow-lg group" {href}>
+<a on:click={onClick} class="flex flex-col rounded pt-1 pb-3 px-4 border border-accSlate/15 bg-white/90 shadow-lg group" {href}>
 	<div class="flex justify-between items-center">
 		<h1 class="text-6xl text-black/70">{stat}</h1>
 		<i class="fa-solid {icon} fa-2xl {iconColor}" />

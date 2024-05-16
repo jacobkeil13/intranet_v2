@@ -1,5 +1,5 @@
 export interface Toast {
-  id: string | null;
+  id?: string;
   message: string;
   description: string | null;
   type: 'success' | 'error' | 'info';
@@ -16,4 +16,15 @@ export interface SidebarLink {
 export interface SidebarLinks {
 	header: string;
 	links: SidebarLink[];
+}
+
+export interface FormObject {
+  [key: string]: any
+}
+
+export interface Order {
+  current_header: string,
+  last_header: string,
+  current_order: string,
+  last_order: string
 }

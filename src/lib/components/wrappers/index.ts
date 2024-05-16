@@ -1,0 +1,1 @@
+export { default as LoadedWrapper } from './LoadedWrapper.svelte';
