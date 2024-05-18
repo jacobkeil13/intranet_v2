@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { DashboardCard, LoadedWrapper } from '$lib';
-	import DashboardGroup from '$lib/components/layout/DashboardGroup.svelte';
-	import DashboardGroupContainer from '$lib/components/layout/DashboardGroupContainer.svelte';
-	import DashboardGroupItem from '$lib/components/layout/DashboardGroupItem.svelte';
+	import {
+		DashboardCard,
+		LoadedWrapper,
+		DashboardGroup,
+		DashboardGroupContainer,
+		DashboardGroupItem
+	} from '$lib';
 	import moment from 'moment';
-	import { Tooltip } from 'svelte-ux';
 	export let data;
 
 	let hasLoadedOnce = false;
-
 	setTimeout(() => {
 		hasLoadedOnce = true;
 	}, 0);
@@ -26,7 +27,7 @@
 		<br />
 
 		<DashboardGroup>
-			<DashboardGroupContainer title="My Referrals" item_num={5}>
+			<DashboardGroupContainer title="My Referrals" item_num={4}>
 				<DashboardGroupItem content="Nour El Houda Tinzefte">
 					<div class="flex gap-1" slot="description">
 						<p class="font-medium text-black/50">U84394541</p>
@@ -68,7 +69,7 @@
 					</div>
 				</DashboardGroupItem>
 			</DashboardGroupContainer>
-			<DashboardGroupContainer title="My Collaborations">
+			<DashboardGroupContainer title="My Collaborations" item_num={2}>
 				<DashboardGroupItem content="Dylan Mandel">
 					<div class="flex gap-1" slot="description">
 						<p class="font-medium text-black/50">U68611365</p>
@@ -90,7 +91,7 @@
 					</div>
 				</DashboardGroupItem>
 			</DashboardGroupContainer>
-			<DashboardGroupContainer title="My Appointments">
+			<DashboardGroupContainer title="My Appointments" item_num={2}>
 				<DashboardGroupItem content="Zoe Solar">
 					<div class="flex gap-1" slot="description">
 						<p class="font-medium text-black/50">U68611365</p>
@@ -159,22 +160,22 @@
 					</div>
 				</DashboardGroupItem>
 			</DashboardGroupContainer>
-			<DashboardGroupContainer title="My DR Queue Requests">
-				<DashboardGroupItem content="2425 Budgets Modified Programs">
-					<div class="flex gap-1" slot="description">
-						<p class="font-medium text-black/50">Website - Update</p>
-						&#x2022;
-						<p class="text-usfGreen/70 italic font-medium">1 day left</p>
-					</div>
-					<div slot="end">
-						<div class="rounded-full bg-orange-400 w-[14px] h-[14px] cursor-pointer"></div>
-					</div>
-				</DashboardGroupItem>
+			<DashboardGroupContainer title="My DR Queue Requests" item_num={2}>
 				<DashboardGroupItem content="Nour El Houda Tinzefte">
 					<div class="flex gap-1" slot="description">
 						<p class="font-medium text-black/50">U84394541</p>
 						&#x2022;
 						<p class="text-red-700/70 italic font-medium">1 day overdue</p>
+					</div>
+					<div slot="end">
+						<div class="rounded-full bg-orange-400 w-[14px] h-[14px] cursor-pointer"></div>
+					</div>
+				</DashboardGroupItem>
+				<DashboardGroupItem content="2425 Budgets Modified Programs">
+					<div class="flex gap-1" slot="description">
+						<p class="font-medium text-black/50">Website - Update</p>
+						&#x2022;
+						<p class="text-usfGreen/70 italic font-medium">1 day left</p>
 					</div>
 					<div slot="end">
 						<div class="rounded-full bg-orange-400 w-[14px] h-[14px] cursor-pointer"></div>

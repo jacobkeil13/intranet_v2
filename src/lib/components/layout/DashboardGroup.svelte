@@ -12,11 +12,13 @@
 			layout = 'grid-cols-1 mobile:grid-cols-2 desktop:grid-cols-2';
 		}
 		if (columns === 3) {
-			layout = 'grid-cols-1 mobile:grid-cols-2 desktop:grid-cols-3';
+			layout = 'grid-cols-1 mobile:grid-cols-2 tablet:grid-cols-3';
 		}
 	});
 </script>
 
-<section class="grid {layout} mobile:divide-x border rounded-t-md bg-white/60 shadow-lg min-h-48">
+<section
+	class="grid {layout} mobile:divide-x border rounded-t-sm bg-white/60 shadow-lg min-h-[186px]"
+>
 	<slot />
 </section>
